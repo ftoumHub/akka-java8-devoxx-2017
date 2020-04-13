@@ -10,9 +10,14 @@ import scala.concurrent.duration.FiniteDuration;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by adelegue on 20/02/2017.
- */
+import static akka.devoxx2017.actors.AnswerPhone.LeaveAMessage;
+import static akka.devoxx2017.actors.Scenarist.CreateScenario;
+import static akka.devoxx2017.messages.Messages.AMovie;
+import static akka.devoxx2017.messages.Messages.PhoneMessage;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static javaslang.control.Option.of;
+import static scala.concurrent.duration.Duration.create;
+
 public class Director extends AbstractLoggingActor {
 
     private final ActorRef replyTo;
@@ -42,12 +47,12 @@ public class Director extends AbstractLoggingActor {
                     this.scenario = msg.scenario;
 
                     billMurrayAnswerPhone.tell(
-                            AnswerPhone.LeaveAMessage(Messages.PhoneMessage("Hey I have a new Scenario for you : "+scenario, self())),
+                            LeaveAMessage(PhoneMessage("Hey I have a new Scenario for you : "+scenario, self())),
                             self()
                     );
 
-                    timeout = Option.of(context().system().scheduler().scheduleOnce(
-                            FiniteDuration.create(3, TimeUnit.SECONDS),
+                    timeout = of(context().system().scheduler().scheduleOnce(
+                            create(3, SECONDS),
                             self(),
                             "To late",
                             context().dispatcher(),
@@ -57,7 +62,7 @@ public class Director extends AbstractLoggingActor {
                 .match(IAmIn.class, msg -> {
                     log().info("He's OK !!!");
                     timeout.forEach(Cancellable::cancel);
-                    Messages.AMovie movie = Messages.AMovie(scenario, "Bill Murray");
+                    AMovie movie = AMovie(scenario, "Bill Murray");
                     context().parent().tell(movie, self());
                     replyTo.tell(movie, self());
                     context().stop(self());
@@ -68,7 +73,7 @@ public class Director extends AbstractLoggingActor {
                 })
                 .match(String.class, m -> m.startsWith("To late"), msg -> {
                     log().info("He never reply for " + scenario);
-                    Messages.AMovie movie = Messages.AMovie(scenario, "Ben Affleck");
+                    AMovie movie = AMovie(scenario, "Ben Affleck");
                     context().parent().tell(movie, self());
                     replyTo.tell(movie, self());
                     context().stop(self());
@@ -78,13 +83,13 @@ public class Director extends AbstractLoggingActor {
 
     @Override
     public void preStart() throws Exception {
-        scenarist.tell(Scenarist.CreateScenario, self());
+        scenarist.tell(CreateScenario, self());
     }
 
     @Override
     public void postRestart(Throwable reason) throws Exception {
         log().info("Retrying !!! ");
-        scenarist.tell(Scenarist.CreateScenario, self());
+        scenarist.tell(CreateScenario, self());
     }
 
     @Override

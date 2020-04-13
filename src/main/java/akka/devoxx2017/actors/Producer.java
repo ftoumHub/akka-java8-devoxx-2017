@@ -1,16 +1,15 @@
 package akka.devoxx2017.actors;
 
 import akka.actor.*;
+import akka.devoxx2017.actors.Director.MovieException;
 import scala.concurrent.duration.Duration;
 
-/**
- * Created by adelegue on 20/02/2017.
- */
+import static scala.concurrent.duration.Duration.Zero;
+
 public class Producer extends AbstractLoggingActor {
 
     private final ActorRef scenarist;
     private final ActorRef billMurrayAnswerPhone;
-
 
     public static CreateMovie CreateMovie = new CreateMovie();
 
@@ -25,8 +24,8 @@ public class Producer extends AbstractLoggingActor {
 
     @Override
     public SupervisorStrategy supervisorStrategy() {
-        return new OneForOneStrategy(1, Duration.Zero(), e -> {
-            if (e instanceof Director.MovieException) {
+        return new OneForOneStrategy(1, Zero(), e -> {
+            if (e instanceof MovieException) {
                 log().error(e, "Arggg");
                 return SupervisorStrategy.restart();
             } else {
