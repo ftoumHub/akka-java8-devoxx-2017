@@ -1,4 +1,10 @@
-.idea
-.iml
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Sbt
 project/target
+
+# Maven
 target/
