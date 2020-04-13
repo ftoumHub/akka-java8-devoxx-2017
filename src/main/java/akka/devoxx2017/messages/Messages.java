@@ -7,7 +7,6 @@ import akka.actor.ActorRef;
  */
 public interface Messages {
 
-
     static AMovie AMovie(String scenario, String actor) {
         return new AMovie(scenario, actor);
     }
@@ -15,7 +14,6 @@ public interface Messages {
     class AMovie {
 
         public final String scenario;
-
         public final String actor;
 
         public AMovie(String scenario, String actor) {

@@ -14,6 +14,9 @@ import akka.stream.javadsl.Source;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
+import static akka.devoxx2017.actors.BillMurray.props;
+import static akka.devoxx2017.actors.Producer.CreateMovie;
+import static akka.devoxx2017.actors.Producer.props;
 import static akka.pattern.PatternsCS.ask;
 
 public class ApplicationMain {
@@ -23,14 +26,13 @@ public class ApplicationMain {
 
         ActorRef scenarist = system.actorOf(Scenarist.props(), "scenarist");
         ActorRef answerPhone = system.actorOf(AnswerPhone.props(), "answerPhone");
-        system.actorOf(BillMurray.props(answerPhone), "billMurray");
+        system.actorOf(props(answerPhone), "billMurray");
 
-
-        ActorRef producer = system.actorOf(Producer.props(scenarist, answerPhone), "producer");
+        ActorRef producer = system.actorOf(props(scenarist, answerPhone), "producer");
 
         CompletionStage<List<Messages.AMovie>> movies = Source.range(0, 20)
                 .mapAsyncUnordered(10, i ->
-                        ask(producer, Producer.CreateMovie, 5000).thenApply(Messages.AMovie.class::cast)
+                        ask(producer, CreateMovie, 5000).thenApply(Messages.AMovie.class::cast)
                 )
                 .runWith(Sink.seq(), ActorMaterializer.create(system));
 
