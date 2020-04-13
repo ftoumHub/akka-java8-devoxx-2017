@@ -2,14 +2,12 @@ package akka.devoxx2017.actors;
 
 import akka.actor.AbstractLoggingActor;
 import akka.actor.Props;
-import akka.devoxx2017.messages.Messages;
 import akka.devoxx2017.messages.Messages.PhoneMessage;
-import javaslang.Tuple2;
-import javaslang.collection.List;
+import io.vavr.Tuple2;
+import io.vavr.collection.List;
 
-import static akka.actor.Props.create;
 import static akka.devoxx2017.messages.Messages.NoMessage;
-import static javaslang.collection.List.empty;
+import static io.vavr.collection.List.empty;
 
 public class AnswerPhone extends AbstractLoggingActor {
 

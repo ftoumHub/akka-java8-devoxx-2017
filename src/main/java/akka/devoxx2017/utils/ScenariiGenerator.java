@@ -1,10 +1,8 @@
 package akka.devoxx2017.utils;
 
-import javaslang.collection.List;
-
+import io.vavr.collection.List;
 import java.util.Random;
-
-import static javaslang.collection.List.of;
+import static io.vavr.collection.List.of;
 
 public class ScenariiGenerator {
 

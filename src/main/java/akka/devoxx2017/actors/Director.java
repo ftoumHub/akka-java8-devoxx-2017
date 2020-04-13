@@ -4,18 +4,14 @@ import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorRef;
 import akka.actor.Cancellable;
 import akka.actor.Props;
-import akka.devoxx2017.messages.Messages;
-import javaslang.control.Option;
-import scala.concurrent.duration.FiniteDuration;
-
-import java.util.concurrent.TimeUnit;
+import io.vavr.control.Option;
 
 import static akka.devoxx2017.actors.AnswerPhone.LeaveAMessage;
 import static akka.devoxx2017.actors.Scenarist.CreateScenario;
 import static akka.devoxx2017.messages.Messages.AMovie;
 import static akka.devoxx2017.messages.Messages.PhoneMessage;
+import static io.vavr.control.Option.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static javaslang.control.Option.of;
 import static scala.concurrent.duration.Duration.create;
 
 public class Director extends AbstractLoggingActor {

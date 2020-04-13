@@ -43,7 +43,7 @@ public class ApplicationMain {
                 .runWith(seq(), create(system));
 
         movies.whenComplete((l, e ) ->
-            javaslang.collection.List.ofAll(l).forEach(m ->
+            io.vavr.collection.List.ofAll(l).forEach(m ->
                     out.println(m.actor + " in " + m.scenario))
         );
     }
